@@ -1,0 +1,60 @@
+# Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# Local databases and generated database files
+*.db
+*.db-*
+*.mv.db
+*.trace.db
+*.lock.db
+
+# Locally generated Lucene index
+/index/
+
+# Application logs and runtime output
+*.log
+logs/
+
+# Environment and local configuration
+.env
+.env.*
+!.env.example
+application-local.yaml
+application-local.yml
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Eclipse / STS
+.classpath
+.project
+.settings/
+.springBeans
+.sts4-cache
+.apt_generated
+.factorypath
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.swp
+*.swo
+*~
+*.tmp
