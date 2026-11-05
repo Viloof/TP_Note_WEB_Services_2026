@@ -8,15 +8,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class PutRestaurantResponseDTO
+public class PatchRestaurantResponseDTO
 {
     private Long id;
     private String adresse;
     private String nom;
 
-    public static PutRestaurantResponseDTO fromEntity(RestaurantEntity restaurantEntity)
+    public static PatchRestaurantResponseDTO fromEntity(RestaurantEntity restaurantEntity)
     {
-        return PutRestaurantResponseDTO.builder()
+        return PatchRestaurantResponseDTO.builder()
                 .id(restaurantEntity.getId())
                 .adresse(restaurantEntity.getAdresse())
                 .nom(restaurantEntity.getNom())

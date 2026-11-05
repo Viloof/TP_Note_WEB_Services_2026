@@ -16,7 +16,7 @@
   - Champs optionnels : image via la route `PUT /restaurants/{id}/image` qui génère une URL présignée pour l'envoi de l'image.
 
 - La possibilité de mettre à jour le nom et l'adresse d'un restaurant (par les utilisateurs ayant le rôle **ADMIN**)
-  - Route : `PUT /restaurants/{id}`
+  - Route : `PATCH /restaurants/{id}`
   - Utilise les données RequestBody au format JSON (nom, adresse) pour modifier un restaurant.
   - Uniquement les champs nom et adresse peuvent être modifiés. L'image ne peut pas être modifiée via cette route.
   - Si un champ n'est pas fourni, il ne sera pas modifié.
@@ -37,7 +37,7 @@
   - Champs optionnels : photos via la route `PUT /evaluations/{id}/images?nbImgs={n}` qui génère une URL présignée pour chaque image à envoyer (avec n <=5 via un RequestParam nbImgs).
 
 - La possibilité de mettre à jour une évaluation (par les utilisateurs ayant le rôle **ADMIN** ou par l'utilisateur ayant créé l'évaluation)
-  - Route : `PUT /evaluations/{id}`
+  - Route : `PATCH /evaluations/{id}`
   - Utilise les données RequestBody au format JSON (note, commentaire) pour modifier une évaluation.
   - Uniquement les champs note et commentaire peuvent être modifiés. Les photos ne peuvent pas être modifiées via cette route.
   - Si un champ n'est pas fourni, il ne sera pas modifié.
@@ -119,6 +119,7 @@ Les principaux cas gérés sont :
 ## Précisions sur certains choix
 - Malgré une contrainte imposant de retourner la moyenne (-1) à la création d'un restaurant, j'ai décidé de ne renvoyer que l'id du restaurant créé. Il n'y a pas de raison de renvoyer la moyenne à ce moment-là selon moi.
 - Le choix des routes pour les évaluations peut sembler étrange, mais il me semble cohérent d'avoir une route pour récupérer toutes les évaluations d'un restaurant et une autre pour récupérer uniquement celles de l'utilisateur connecté sur un restaurant. Idem pour les évaluations dans leur globalité. Je trouve que ça peut avoir un intéret côté client.
+- Le JDK utilisé est la version 25 Temurin.
 
 ## Retour d'expérience
 - Le projet m'a permis d'approfondir mes connaissance en Spring Boot et la création d'API REST. 

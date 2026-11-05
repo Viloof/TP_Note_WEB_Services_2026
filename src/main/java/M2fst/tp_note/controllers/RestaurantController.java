@@ -29,28 +29,28 @@ public class RestaurantController
 
     // Permet de récupérer l'URL de l'image d'un restaurant
     @GetMapping("/restaurants/{id}/image")
-    public ResponseEntity<String> getImageUrl(@PathVariable(name= "id") Long restaurantId)
+    public ResponseEntity<ImageRestoURLDTO> getImageUrl(@PathVariable(name= "id") Long restaurantId)
     {
         String imageUrl = s3Repository.getRestoFileUrl(this.restaurantService.getRestaurant(restaurantId).getImageUrl());
-        return ResponseEntity.ok(imageUrl);
+        return ResponseEntity.ok(ImageRestoURLDTO.fromLink(imageUrl));
     }
 
     // Permet de générer une URL d'upload pour l'image d'un restaurant (accessible uniquement aux administrateurs)
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/restaurants/{id}/image")
-    public ResponseEntity<String> uploadImageUrl(@PathVariable(name= "id") Long restaurantId, @AuthenticationPrincipal Jwt principal)
+    public ResponseEntity<ImageRestoURLDTO> uploadImageUrl(@PathVariable(name= "id") Long restaurantId, @AuthenticationPrincipal Jwt principal)
     {
 
         String imageUrl = s3Repository.getRestoUploadFileUrl(this.restaurantService.addImageUrl(restaurantId, String.valueOf(restaurantId)));
-        return ResponseEntity.ok(imageUrl);
+        return ResponseEntity.ok(ImageRestoURLDTO.fromLink(imageUrl));
     }
 
     // Permet de mettre à jour un restaurant (accessible uniquement aux administrateurs)
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/restaurants/{id}")
-    public ResponseEntity<PutRestaurantResponseDTO> updateRestaurant(@PathVariable(name= "id") Long id, @Valid @RequestBody UpdateRestaurantDTO restaurantDTO, @AuthenticationPrincipal Jwt principal)
+    @PatchMapping("/restaurants/{id}")
+    public ResponseEntity<PatchRestaurantResponseDTO> updateRestaurant(@PathVariable(name= "id") Long id, @Valid @RequestBody UpdateRestaurantDTO restaurantDTO, @AuthenticationPrincipal Jwt principal)
     {
-        return ResponseEntity.ok(PutRestaurantResponseDTO.fromEntity(this.restaurantService.updateRestaurant(restaurantDTO.getNom(), restaurantDTO.getAdresse(), id)));
+        return ResponseEntity.ok(PatchRestaurantResponseDTO.fromEntity(this.restaurantService.updateRestaurant(restaurantDTO.getNom(), restaurantDTO.getAdresse(), id)));
     }
 
     // Permet de récupérer la liste de tous les restaurants

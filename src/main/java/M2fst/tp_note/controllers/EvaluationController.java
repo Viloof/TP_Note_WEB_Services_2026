@@ -38,10 +38,10 @@ public class EvaluationController
 
     // Permet de mettre à jour une évaluation par son auteur ou par un administrateur
     @PreAuthorize("@evaluationSecurity.isOwnerOrAdmin(authentication, #id, principal.getClaimAsString('preferred_username'))")
-    @PutMapping("/evaluations/{id}")
-    public ResponseEntity<PutEvaluationResponseDTO> updateEvaluation(@PathVariable(name= "id") Long id, @Valid @RequestBody CreateEvaluationDTO eval, @AuthenticationPrincipal Jwt principal)
+    @PatchMapping("/evaluations/{id}")
+    public ResponseEntity<PatchEvaluationResponseDTO> updateEvaluation(@PathVariable(name= "id") Long id, @Valid @RequestBody CreateEvaluationDTO eval, @AuthenticationPrincipal Jwt principal)
     {
-        return ResponseEntity.ok(PutEvaluationResponseDTO.fromEntity(this.evaluationService.updateEvaluation(id, eval.getCommentaire(), eval.getNote())));
+        return ResponseEntity.ok(PatchEvaluationResponseDTO.fromEntity(this.evaluationService.updateEvaluation(id, eval.getCommentaire(), eval.getNote())));
     }
 
     // Récupère les évaluations d'un restaurant créées par l'utilisateur connecté
@@ -62,19 +62,19 @@ public class EvaluationController
     // Permet de récupérer les urls des images d'une évaluation et de générer des urls d'upload pour l'évaluation par son auteur ou par un administrateur
     @PreAuthorize("@evaluationSecurity.isOwnerOrAdmin(authentication, #id, principal.getClaimAsString('preferred_username'))")
     @PutMapping("/evaluations/{idEval}/images")
-    public ResponseEntity<Collection<String>> uploadImageUrl(@PathVariable(name= "idEval") Long id, @RequestParam(name= "nbImgs") @Min(value = 0, message = "Le nombre de fichiers doit être au moins égal à 1.") @Max(value = 5, message = "Le nombre de fichiers doit être inférieur à 5.") int nbFiles, @AuthenticationPrincipal Jwt principal)
+    public ResponseEntity<ImageEvalURLDTO> uploadImageUrl(@PathVariable(name= "idEval") Long id, @RequestParam(name= "nbImgs") @Min(value = 0, message = "Le nombre de fichiers doit être au moins égal à 1.") @Max(value = 5, message = "Le nombre de fichiers doit être inférieur à 5.") int nbFiles, @AuthenticationPrincipal Jwt principal)
     {
-        Collection<String> fileUrls = s3Repository.getEvalUploadFileUrls(this.evaluationService.addImageUrl(id, nbFiles));
-        return ResponseEntity.ok(fileUrls);
+        List<String> fileUrls = (List<String>) s3Repository.getEvalUploadFileUrls(this.evaluationService.addImageUrl(id, nbFiles));
+        return ResponseEntity.ok(ImageEvalURLDTO.fromLinks(fileUrls));
     }
 
 
     // Permet de récuperer les urls des images d'une évaluation et d'obtenir les liens des images sur le bucket S3
     @GetMapping("/evaluations/{idEval}/images")
-    public ResponseEntity<Collection<String>> getImageUrls(@PathVariable(name= "idEval") Long evaluationId)
+    public ResponseEntity<ImageEvalURLDTO> getImageUrls(@PathVariable(name= "idEval") Long evaluationId)
     {
-        Collection<String> imageUrls = s3Repository.getEvalFileUrls((List<String>) this.evaluationService.getImageUrls(evaluationId));
-        return ResponseEntity.ok(imageUrls);
+        List<String> imageUrls = (List<String>) s3Repository.getEvalFileUrls((List<String>) this.evaluationService.getImageUrls(evaluationId));
+        return ResponseEntity.ok(ImageEvalURLDTO.fromLinks(imageUrls));
     }
 
     // Permet de rechercher des évaluations par restaurant et par mot-clé

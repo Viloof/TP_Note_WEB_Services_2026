@@ -8,15 +8,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class PutEvaluationResponseDTO
+public class PatchEvaluationResponseDTO
 {
     private Long id;
     private String commentaire;
     private int note;
 
-    public static PutEvaluationResponseDTO fromEntity(EvaluationEntity evaluationEntity)
+    public static PatchEvaluationResponseDTO fromEntity(EvaluationEntity evaluationEntity)
     {
-        return PutEvaluationResponseDTO.builder()
+        return PatchEvaluationResponseDTO.builder()
                 .id(evaluationEntity.getId())
                 .commentaire(evaluationEntity.getContenu())
                 .note(evaluationEntity.getNote())
